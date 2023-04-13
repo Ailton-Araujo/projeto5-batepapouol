@@ -37,7 +37,6 @@
     </div>
 
     <div class="msgPage hidden">
-        
         <header>
             <img src="./assets/logo_1.png" alt="">
             <button data-test="open-participants" type="button" onclick="menuSidebar()"><ion-icon name="people"></ion-icon></button>
@@ -49,10 +48,14 @@
         </div>
 
         <main>
-            <ul></ul>
+            <ul>
+            </ul>
         </main>
 
-        <footer></footer>
+        <footer>
+            <input data-test="input-message" type="text" class="textMsg" placeholder="Escreva aqui...">
+            <button data-test="send-message" type="submit" onclick="sendMsg()"><ion-icon name="paper-plane-outline"></ion-icon></button>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
