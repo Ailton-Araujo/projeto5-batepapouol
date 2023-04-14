@@ -129,14 +129,14 @@ function renderUsers() {
                 <li data-test="all" class="to" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
                     <p>Todos</p>
-                    <ion-icon class="check show" name="checkmark"></ion-icon>
+                    <ion-icon data-test="check" class="check show" name="checkmark"></ion-icon>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
             users.innerHTML += `
                 <li data-test="participant" data-test="check" class="to" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
                     <p>${reply.data[i].name}</p>
-                    <ion-icon class="check hidden" name="checkmark"></ion-icon>
+                    <ion-icon data-test="check" class="check hidden" name="checkmark"></ion-icon>
                 </li>`;
         }
     })
@@ -146,7 +146,7 @@ const inputMsg = document.querySelector(".textMsg");
 inputMsg.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         ///event.preventDefault();
-        document.querySelector("footer>button").click();
+        document.querySelector(".userMsg>button").click();
     }
 }
 );
