@@ -131,14 +131,14 @@ function renderUsers() {
     promiseUsers.then((reply) => {
         let users = document.querySelector(".menuSide>.users");
         users.innerHTML = `
-                <li  class="to" onclick="dataMsg(this)">
+                <li data-test="check" class="to" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
                     <p data-test="all">Todos</p>
                     <ion-icon data-test="check" class="check show" name="checkmark"></ion-icon>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
             users.innerHTML += `
-                <li class="to" onclick="dataMsg(this)">
+                <li data-test="check" class="to" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
                     <p data-test="participant">${reply.data[i].name}</p>
                     <ion-icon data-test="check" class="check hidden" name="checkmark"></ion-icon>
