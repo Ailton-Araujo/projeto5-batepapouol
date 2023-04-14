@@ -32,7 +32,6 @@ function menuSidebar() {
 
 
 function dataMsg(data) {
-    test = data.querySelector("p").innerHTML;
     if (data.classList.contains("to") === true &&
         data.querySelector(".check.hidden") !== null) {
 
@@ -43,9 +42,8 @@ function dataMsg(data) {
         data.querySelector(".to>.check").classList.add("show");
 
         document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
-
         message.to = data.querySelector("p").innerHTML;
-        document
+
     } else if (data.classList.contains("type") === true) {
 
         data.parentNode.querySelector(".check.show").classList.add("hidden");
@@ -169,9 +167,9 @@ function sendMsg() {
 }
 
 conectServer('yLXdTVeSPYJui1kPya4pTuGv');
-//setInterval(() => {
-//    axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
-//}, 5000);
+setInterval(() => {
+    axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
+}, 5000);
 
 setInterval(renderMsgs, 3000);
 setInterval(renderUsers, 10000);
