@@ -53,7 +53,7 @@ function dataMsg(data) {
         data.querySelector(".type>.check").classList.add("show");
 
         if (data.classList[1] === "private_message") {
-            document.querySelector("span.typeMsg").innerHTML = " " + data.querySelector("p").innerHTML;
+            document.querySelector("span.typeMsg").innerHTML = ` (${data.querySelector("p").innerHTML})`;
         } else {
             document.querySelector("span.typeMsg").innerHTML = "";
         }
@@ -83,6 +83,8 @@ function loginServer() {
             document.querySelector(".msgPage").classList.remove("hidden");
             renderMsgs();
             renderUsers();
+            setInterval(renderMsgs, 3000);
+            setInterval(renderUsers, 10000);
         }
     });
     promiseLogin.catch((reply) => {
@@ -99,19 +101,24 @@ function renderMsgs() {
     const promiseMsg = axios.get('https://mock-api.driven.com.br/api/vm/uol/messages');
     /// Build the messages.
     promiseMsg.then((reply) => {
+        let text = ``;
         let mensages = document.querySelector("main>ul");
         mensages.innerHTML = ""
         for (let i = 0; i < reply.data.length; i++) {
+            switch(reply.data[i].type){
+                case "status":
+                    text = `<strong>${reply.data[i].from}</strong>`
+                    break;
+                case "message":
+                    text = `<strong>${reply.data[i].from}</strong> para <strong>${reply.data[i].to}:</strong>`
+                    break;
+                case "private_message":
+                    text = `<strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong>`
+                    break;
+            }
             mensages.innerHTML += `
             <li data-test="message" class="msg ${reply.data[i].type}">
-                <p><span class="time">
-                   (${reply.data[i].time}) 
-                </span><strong>
-                    ${reply.data[i].from}
-                </strong> definir em um switch/case <strong>
-                 ${reply.data[i].to}: 
-                </strong>${reply.data[i].text}
-                </p>
+                <p><span class="time">(${reply.data[i].time})</span> ${text} ${reply.data[i].text}</p>
             </li>`
         }
         mensages.scrollIntoView({ block: "end" });
@@ -124,16 +131,16 @@ function renderUsers() {
     promiseUsers.then((reply) => {
         let users = document.querySelector(".menuSide>.users");
         users.innerHTML = `
-                <li data-test="all" class="to" onclick="dataMsg(this)">
+                <li  class="to" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
-                    <p>Todos</p>
+                    <p data-test="all">Todos</p>
                     <ion-icon data-test="check" class="check show" name="checkmark"></ion-icon>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
             users.innerHTML += `
-                <li data-test="participant" data-test="check" class="to" onclick="dataMsg(this)">
+                <li class="to" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
-                    <p>${reply.data[i].name}</p>
+                    <p data-test="participant">${reply.data[i].name}</p>
                     <ion-icon data-test="check" class="check hidden" name="checkmark"></ion-icon>
                 </li>`;
         }
@@ -171,5 +178,3 @@ setInterval(() => {
     axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
 }, 5000);
 
-setInterval(renderMsgs, 3000);
-setInterval(renderUsers, 10000);

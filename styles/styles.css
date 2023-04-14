@@ -257,10 +257,11 @@ footer {
     width: 90%;
     height: 30px;
     background: #FFFFFF;
+    border: none;
     font-weight: 400;
     font-size: 18px;
     line-height: 21px;
-    color: #AEAEAE;
+    color: #000000;
     text-align: start;
 }
 
