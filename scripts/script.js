@@ -133,7 +133,7 @@ function renderUsers(){
 }
 
 
-conectServer('acsHz5fDbHqGBG8Lt8tgt1gf');
+conectServer('');
 setInterval(() => {
     axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
 }, 5000);

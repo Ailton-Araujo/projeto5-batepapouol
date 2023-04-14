@@ -140,8 +140,8 @@ header button ion-icon {
 }
 
 .users{
-    height: 60%;
     overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 .to,
@@ -189,6 +189,7 @@ main {
 
 main>ul {
     overflow-y: scroll;
+    scroll-behavior: smooth;
     padding-bottom: 80px;
 }
 
