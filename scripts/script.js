@@ -30,27 +30,20 @@ function menuSidebar() {
     }
 }
 
-
 function dataMsg(data) {
+    let old = document.querySelector("li>span .check");
+    old.parentNode.innerHTML = ""
     if (data.classList.contains("to") === true &&
-        data.querySelector(".check.hidden") !== null) {
+        data.querySelector("span.check") === null) {
+            data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
 
-        data.parentNode.querySelector(".check.show").classList.add("hidden");
-        data.parentNode.querySelector(".check.show").classList.remove("show");
-
-        data.querySelector(".to>.check").classList.remove("hidden");
-        data.querySelector(".to>.check").classList.add("show");
-
-        document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
-        message.to = data.querySelector("p").innerHTML;
-
-    } else if (data.classList.contains("type") === true) {
-
-        data.parentNode.querySelector(".check.show").classList.add("hidden");
-        data.parentNode.querySelector(".check.show").classList.remove("show");
-
-        data.querySelector(".type>.check").classList.remove("hidden");
-        data.querySelector(".type>.check").classList.add("show");
+            document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
+            message.to = data.querySelector("p").innerHTML;
+            
+    } else if (data.classList.contains("type") === true &&
+        data.querySelector("span.check") === null) {
+            
+            data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
 
         if (data.classList[1] === "private_message") {
             document.querySelector("span.typeMsg").innerHTML = ` (${data.querySelector("p").innerHTML})`;
@@ -60,7 +53,6 @@ function dataMsg(data) {
 
         message.type = data.classList[1];
     }
-    console.log(message)
 }
 
 function conectServer(string) {
@@ -131,17 +123,17 @@ function renderUsers() {
     promiseUsers.then((reply) => {
         let users = document.querySelector(".menuSide>.users");
         users.innerHTML = `
-                <li data-test="check" class="to" onclick="dataMsg(this)">
+                <li class="to" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
                     <p data-test="all">Todos</p>
-                    <ion-icon data-test="check" class="check show" name="checkmark"></ion-icon>
+                    <span><ion-icon data-test="check" class="check" name="checkmark"></ion-icon></span>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
             users.innerHTML += `
-                <li data-test="check" class="to" onclick="dataMsg(this)">
+                <li class="to" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
                     <p data-test="participant">${reply.data[i].name}</p>
-                    <ion-icon data-test="check" class="check hidden" name="checkmark"></ion-icon>
+                    <span></span>
                 </li>`;
         }
     })
@@ -167,9 +159,7 @@ function sendMsg() {
         }
     });
     promiseMsg.catch((reply) => {
-        if (reply.response.status === 400) {
-            window.location.reload();
-        }
+        window.location.reload();
     });
 }
 
