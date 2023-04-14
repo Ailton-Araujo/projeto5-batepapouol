@@ -39,12 +39,28 @@
     <div class="msgPage hidden">
         <header>
             <img src="./assets/logo_1.png" alt="">
-            <button data-test="open-participants" type="button" onclick="menuSidebar()"><ion-icon name="people"></ion-icon></button>
+            <button data-test="open-participants" type="button" onclick="menuSidebar()"><ion-icon
+                    name="people"></ion-icon></button>
         </header>
 
         <div data-test="overlay" class="sidebar hidden">
             <div class="mask" onclick="menuSidebar()"></div>
-            <div class="menuSide">asdasda</div>
+            <div class="menuSide">
+                <ul class="users">
+                </ul>
+                <ul class="msgType">
+                    <li onclick="dataMsg(this)" class="type message">
+                        <ion-icon name="lock-open"></ion-icon>
+                        <p>Público</p>
+                        <ion-icon class="check show" name="checkmark"></ion-icon>
+                    </li>
+                    <li onclick="dataMsg(this)" class="type private_message">
+                        <ion-icon name="lock-open"></ion-icon>
+                        <p>Reservadamente</p>
+                        <ion-icon class="check hidden" name="checkmark"></ion-icon>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <main>
@@ -54,7 +70,8 @@
 
         <footer>
             <input data-test="input-message" type="text" class="textMsg" placeholder="Escreva aqui...">
-            <button data-test="send-message" type="submit" onclick="sendMsg()"><ion-icon name="paper-plane-outline"></ion-icon></button>
+            <button data-test="send-message" type="submit" onclick="sendMsg()"><ion-icon
+                    name="paper-plane-outline"></ion-icon></button>
         </footer>
     </div>
 
