@@ -3,11 +3,6 @@
     font-family: 'Roboto', sans-serif;
 }
 
-span {
-    font-weight: 400;
-    color: #AAAAAA;
-}
-
 strong {
     font-weight: 700;
 }
@@ -139,7 +134,20 @@ header button ion-icon {
     translate: -0px 0px;
 }
 
-.users{
+h1 {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    padding: 25px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+}
+
+.users {
+    height: 30%;
     overflow-y: scroll;
     scroll-behavior: smooth;
 }
@@ -150,6 +158,7 @@ header button ion-icon {
     display: flex;
     align-items: center;
     font-family: 'Roboto', sans-serif;
+    position: relative;
 }
 
 .to ion-icon,
@@ -195,6 +204,7 @@ main>ul {
 
 .msg {
     width: 100%;
+    height: auto;
     padding: 10px 5px;
     margin: 2px 0px;
     border-radius: 2px;
@@ -203,43 +213,83 @@ main>ul {
     line-height: 16px;
 }
 
-.msg .status {
+span.time {
+    font-weight: 400;
+    color: #AAAAAA;
+}
+
+.msg.status {
     background: #DCDCDC
 }
 
-.msg .message {
+.msg.message {
     background: #FFFFFF;
 }
 
-.msg .private_message {
+.msg.private_message {
     background: #FFDEDE;
 }
 
 footer {
     width: 100%;
     height: 80px;
-    padding: 0px 17px;
+    gap: 5px;
     position: fixed;
     bottom: 0px;
     background: #FFFFFF;
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     z-index: 1;
 }
 
-footer button {
+.userMsg {
+    width: 100%;
+    padding: 0px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userMsg>input {
+    width: 90%;
+    height: 30px;
+    background: #FFFFFF;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: #AEAEAE;
+    text-align: start;
+}
+
+.userMsg button {
     width: 26px;
     height: 26px;
     border: none;
     background: none;
 }
 
-footer button ion-icon {
+.userMsg button ion-icon {
     width: 26px;
     height: 26px;
 }
+
+.sendData{
+    width: 100%;
+    padding: 0px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 25px;
+    text-align: start;
+    color: #505050;
+}
+
 
 daiv {
     outline: 1px solid black;

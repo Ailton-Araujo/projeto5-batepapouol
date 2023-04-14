@@ -1,9 +1,9 @@
 let user = {};
 let message = {
     from: "",
-	to: "Todos",
-	text: "",
-	type: "message"
+    to: "Todos",
+    text: "",
+    type: "message"
 }
 
 const inputLogin = document.querySelector(".idLogin");
@@ -30,25 +30,35 @@ function menuSidebar() {
     }
 }
 
-function dataMsg(data){
-    if(data.classList.contains("to") === true &&
-    data.querySelector(".check.hidden") !== null){
+
+function dataMsg(data) {
+    test = data.querySelector("p").innerHTML;
+    if (data.classList.contains("to") === true &&
+        data.querySelector(".check.hidden") !== null) {
 
         data.parentNode.querySelector(".check.show").classList.add("hidden");
         data.parentNode.querySelector(".check.show").classList.remove("show");
 
         data.querySelector(".to>.check").classList.remove("hidden");
         data.querySelector(".to>.check").classList.add("show");
-        
-        message.to = data.querySelector("p").innerHTML;
 
-    }else if(data.classList.contains("type") === true){
+        document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
+
+        message.to = data.querySelector("p").innerHTML;
+        document
+    } else if (data.classList.contains("type") === true) {
 
         data.parentNode.querySelector(".check.show").classList.add("hidden");
         data.parentNode.querySelector(".check.show").classList.remove("show");
 
         data.querySelector(".type>.check").classList.remove("hidden");
         data.querySelector(".type>.check").classList.add("show");
+
+        if (data.classList[1] === "private_message") {
+            document.querySelector("span.typeMsg").innerHTML = " " + data.querySelector("p").innerHTML;
+        } else {
+            document.querySelector("span.typeMsg").innerHTML = "";
+        }
 
         message.type = data.classList[1];
     }
@@ -65,7 +75,7 @@ function loginServer() {
     };
     message.from = user.name;
 
-    const promiseLogin = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', user)
+    const promiseLogin = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', user);
     document.querySelector(".userInput").classList.add("hidden");
     document.querySelector(".loading").classList.remove("hidden");
 
@@ -73,7 +83,8 @@ function loginServer() {
         if (reply.status === 200) {
             document.querySelector(".loginPage").classList.add("hidden");
             document.querySelector(".msgPage").classList.remove("hidden");
-            renderPage();
+            renderMsgs();
+            renderUsers();
         }
     });
     promiseLogin.catch((reply) => {
@@ -81,22 +92,21 @@ function loginServer() {
             document.querySelector(".loading").classList.add("hidden");
             document.querySelector(".userInput").classList.remove("hidden");
             alert("Nome de Usuário já utilizado, por favor selecione outro Nome de Usuário");
-            input.value = "";
+            inputLogin.value = "";
         }
     });
-
 }
 
-function renderMsgs(){
+function renderMsgs() {
     const promiseMsg = axios.get('https://mock-api.driven.com.br/api/vm/uol/messages');
     /// Build the messages.
     promiseMsg.then((reply) => {
         let mensages = document.querySelector("main>ul");
         mensages.innerHTML = ""
-        for(let i = 0; i < reply.data.length; i++){
+        for (let i = 0; i < reply.data.length; i++) {
             mensages.innerHTML += `
             <li data-test="message" class="msg ${reply.data[i].type}">
-                <p><span>
+                <p><span class="time">
                    (${reply.data[i].time}) 
                 </span><strong>
                     ${reply.data[i].from}
@@ -104,42 +114,65 @@ function renderMsgs(){
                  ${reply.data[i].to}: 
                 </strong>${reply.data[i].text}
                 </p>
-            </li>`   
+            </li>`
         }
-        mensages.scrollIntoView({block: "end"});
+        mensages.scrollIntoView({ block: "end" });
     });
 }
 
-function renderUsers(){
+function renderUsers() {
     const promiseUsers = axios.get('https://mock-api.driven.com.br/api/vm/uol/participants');
-        /// Build the sidebar
-        promiseUsers.then((reply) =>{
-            let users = document.querySelector(".menuSide>.users");
-            users.innerHTML = `
+    /// Build the sidebar
+    promiseUsers.then((reply) => {
+        let users = document.querySelector(".menuSide>.users");
+        users.innerHTML = `
                 <li data-test="all" class="to" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
                     <p>Todos</p>
                     <ion-icon class="check show" name="checkmark"></ion-icon>
                 </li>`;
-            for(let i = 0; i < reply.data.length; i++){
-                users.innerHTML += `
+        for (let i = 0; i < reply.data.length; i++) {
+            users.innerHTML += `
                 <li data-test="participant" data-test="check" class="to" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
                     <p>${reply.data[i].name}</p>
                     <ion-icon class="check hidden" name="checkmark"></ion-icon>
                 </li>`;
-            }
-        })
+        }
+    })
 }
 
+const inputMsg = document.querySelector(".textMsg");
+inputMsg.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        ///event.preventDefault();
+        document.querySelector("footer>button").click();
+    }
+}
+);
 
-conectServer('');
+function sendMsg() {
+    message.text = inputMsg.value;
+    inputMsg.value = "";
+    const promiseMsg = axios.post('https://mock-api.driven.com.br/api/vm/uol/messages', message);
+    message.text = "";
+    promiseMsg.then((reply) => {
+        if (reply.status === 200) {
+            renderMsgs();
+        }
+    });
+    promiseMsg.catch((reply) => {
+        if (reply.response.status === 400) {
+            alert("Usuário desconectado.");
+            window.location.reload();
+        }
+    });
+}
+
+conectServer('yLXdTVeSPYJui1kPya4pTuGv');
 setInterval(() => {
     axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
 }, 5000);
 
-renderMsgs()
-renderUsers()
 setInterval(renderMsgs, 3000);
 setInterval(renderUsers, 10000);
-

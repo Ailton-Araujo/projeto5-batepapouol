@@ -46,15 +46,17 @@
         <div data-test="overlay" class="sidebar hidden">
             <div class="mask" onclick="menuSidebar()"></div>
             <div class="menuSide">
+                <h1>Escolha um contato para enviar mensagem:</h1>
                 <ul class="users">
                 </ul>
+                <h1>Escolha a visibilidade:</h1>
                 <ul class="msgType">
-                    <li onclick="dataMsg(this)" class="type message">
+                    <li data-test="public" onclick="dataMsg(this)" class="type message">
                         <ion-icon name="lock-open"></ion-icon>
                         <p>Público</p>
                         <ion-icon class="check show" name="checkmark"></ion-icon>
                     </li>
-                    <li onclick="dataMsg(this)" class="type private_message">
+                    <li data-test="private" onclick="dataMsg(this)" class="type private_message">
                         <ion-icon name="lock-open"></ion-icon>
                         <p>Reservadamente</p>
                         <ion-icon class="check hidden" name="checkmark"></ion-icon>
@@ -69,9 +71,15 @@
         </main>
 
         <footer>
-            <input data-test="input-message" type="text" class="textMsg" placeholder="Escreva aqui...">
-            <button data-test="send-message" type="submit" onclick="sendMsg()"><ion-icon
-                    name="paper-plane-outline"></ion-icon></button>
+            <div class="userMsg">
+                <input data-test="input-message" type="text" class="textMsg" placeholder="Escreva aqui...">
+                <button data-test="send-message" type="submit" onclick="sendMsg()">
+                    <ion-icon name="paper-plane-outline"></ion-icon>
+                </button>
+            </div>
+            <div data-test="recipient" class="sendData">
+                <p>Enviando para <span class="toMsg">Todos</span><span class="typeMsg"></span></p>
+            </div>
         </footer>
     </div>
 
