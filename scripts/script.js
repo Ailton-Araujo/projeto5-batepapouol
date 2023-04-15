@@ -1,6 +1,5 @@
 let user = {};
 let toUser = "";
-let oldToUser = "";
 let message = {
     from: "",
     to: "Todos",
@@ -34,14 +33,12 @@ function menuSidebar() {
 
 function dataMsg(data) {
 
-    if (data.classList.contains("to") === true &&
-        data.querySelector("span .check") === null) {
+    if (data.classList.contains("to") === true) {
 
+        let oldToUser = document.querySelector(".users span .check");
         oldToUser.parentNode.innerHTML = "";
+
         data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`;
-
-        oldToUser = document.querySelector(".users li>span .check");
-
         document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
         toUser = data.querySelector("p").innerHTML;
         message.to = data.querySelector("p").innerHTML;
@@ -140,7 +137,7 @@ function renderUsers() {
                 <li data-test="all" class="to toAll" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
                     <p>Todos</p>
-                    <span></span>
+                    <span><ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon></span>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
             if (toUser !== reply.data[i].name) {
@@ -151,20 +148,15 @@ function renderUsers() {
                     <span></span>
                 </li>`;
             } else if (toUser === reply.data[i].name) {
+                users.querySelector(".toAll span").innerHTML = "";
                 users.innerHTML += `
                 <li data-test="participant" class="to toUser" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
                     <p >${reply.data[i].name}</p>
                     <span><ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon></span>
                 </li>`;
-                checkStatus = 1;
-                oldToUser = users.querySelector(".toUser span .check");
+                
             }
-        }
-
-        if (checkStatus === 0) {
-            users.querySelector(".toAll span").innerHTML += `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`;
-            oldToUser = users.querySelector(".toAll span .check");
         }
     })
 }
