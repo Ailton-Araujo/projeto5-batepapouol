@@ -75,7 +75,9 @@ function loginServer() {
             document.querySelector(".loginPage").classList.add("hidden");
             document.querySelector(".msgPage").classList.remove("hidden");
             renderMsgs();
+            setInterval(renderMsgs, 2998);
             renderUsers();
+            setInterval(renderUsers, 9998);
         }
     });
     promiseLogin.catch((reply) => {
@@ -186,8 +188,7 @@ function sendMsg() {
 }
 
 conectServer('yLXdTVeSPYJui1kPya4pTuGv');
-setInterval(renderMsgs, 3000);
-setInterval(renderUsers, 10000);
+
 setInterval(() => {
     axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
 }, 5000);
