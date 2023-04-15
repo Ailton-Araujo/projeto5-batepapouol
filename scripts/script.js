@@ -1,4 +1,5 @@
 let user = {};
+let toUser = "";
 let message = {
     from: "",
     to: "Todos",
@@ -30,25 +31,26 @@ function menuSidebar() {
     }
 }
 
-let test;
+
 
 function dataMsg(data) {
     if (data.classList.contains("to") === true &&
         data.querySelector("span .check") === null) {
-            let old = document.querySelector(".users li>span .check");
-            old.parentNode.innerHTML = ""
+        let old = document.querySelector(".users span .check");
+        old.parentNode.innerHTML = ""
 
-            data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
+        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
 
-            document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
-            message.to = data.querySelector("p").innerHTML;
-            
+        document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
+        toUser = data.querySelector("p").innerHTML;
+        message.to = data.querySelector("p").innerHTML;
+
     } else if (data.classList.contains("type") === true &&
         data.querySelector("span .check") === null) {
-            let old = document.querySelector(".msgType li>span .check");
-            old.parentNode.innerHTML = ""
+        let old = document.querySelector(".msgType li>span .check");
+        old.parentNode.innerHTML = ""
 
-            data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
+        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
 
         if (data.classList[1] === "private_message") {
             document.querySelector("span.typeMsg").innerHTML = ` (${data.querySelector("p").innerHTML})`;
@@ -102,44 +104,68 @@ function renderMsgs() {
         let mensages = document.querySelector("main>ul");
         mensages.innerHTML = ""
         for (let i = 0; i < reply.data.length; i++) {
-            switch(reply.data[i].type){
+            switch (reply.data[i].type) {
                 case "status":
-                    text = `<strong>${reply.data[i].from}</strong>`
+                    mensages.innerHTML += `
+                    <li data-test="message" class="msg ${reply.data[i].type}">
+                        <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> ${reply.data[i].text}</p>
+                    </li>`
                     break;
                 case "message":
-                    text = `<strong>${reply.data[i].from}</strong> para <strong>${reply.data[i].to}:</strong>`
+                    mensages.innerHTML += `
+                    <li data-test="message" class="msg ${reply.data[i].type}">
+                        <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
+                    </li>`
                     break;
                 case "private_message":
-                    text = `<strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong>`
+                    if (reply.data[i].from === user.name || reply.data[i].to === user.name) {
+                        mensages.innerHTML += `
+                        <li data-test="message" class="msg ${reply.data[i].type}">
+                            <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
+                        </li>`
+                    }
                     break;
             }
-            mensages.innerHTML += `
-            <li data-test="message" class="msg ${reply.data[i].type}">
-                <p><span class="time">(${reply.data[i].time})</span> ${text} ${reply.data[i].text}</p>
-            </li>`
         }
         mensages.scrollIntoView({ block: "end" });
     });
 }
 
+
 function renderUsers() {
     const promiseUsers = axios.get('https://mock-api.driven.com.br/api/vm/uol/participants');
     /// Build the sidebar
     promiseUsers.then((reply) => {
+        let checkStatus = 0;
         let users = document.querySelector(".menuSide>.users");
         users.innerHTML = `
-                <li class="to" onclick="dataMsg(this)">
+                <li class="to toAll" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
                     <p data-test="all">Todos</p>
-                    <span><ion-icon data-test="check" class="check" name="checkmark"></ion-icon></span>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
-            users.innerHTML += `
-                <li class="to" onclick="dataMsg(this)">
+            if (toUser !== reply.data[i].name) {
+                users.innerHTML += `
+                <li class="to toUser" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
                     <p data-test="participant">${reply.data[i].name}</p>
                     <span></span>
                 </li>`;
+            } else if (toUser === reply.data[i].name) {
+                users.innerHTML += `
+                <li class="to toUser" onclick="dataMsg(this)">
+                    <ion-icon name="person-circle"></ion-icon>
+                    <p data-test="participant">${reply.data[i].name}</p>
+                    <span><ion-icon data-test="check" class="check" name="checkmark"></ion-icon></span>
+                </li>`;
+                checkStatus = 1;
+            }
+            if(i === (reply.data.length-1) && checkStatus !== 1){
+                toUser = "";
+            }
+        }
+        if (toUser === "" && checkStatus !== 1) {
+            document.querySelector(".users > .toAll").innerHTML += `<span><ion-icon data-test="check" class="check" name="checkmark"></ion-icon></span>`
         }
     })
 }
@@ -148,7 +174,7 @@ const inputMsg = document.querySelector(".textMsg");
 inputMsg.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         ///event.preventDefault();
-        document.querySelector(".userMsg>button").click();
+        document.querySelector("footer > button").click();
     }
 }
 );
