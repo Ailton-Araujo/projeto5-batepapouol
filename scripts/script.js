@@ -143,23 +143,23 @@ function renderUsers() {
         let checkStatus = 0;
         let users = document.querySelector(".menuSide>.users");
         users.innerHTML = `
-                <li class="to toAll" onclick="dataMsg(this)">
+                <li data-test="all" class="to toAll" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
-                    <p data-test="all">Todos</p>
+                    <p>Todos</p>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
             if (toUser !== reply.data[i].name) {
                 users.innerHTML += `
-                <li class="to toUser" onclick="dataMsg(this)">
+                <li data-test="participant" class="to toUser" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
-                    <p data-test="participant">${reply.data[i].name}</p>
+                    <p>${reply.data[i].name}</p>
                     <span></span>
                 </li>`;
             } else if (toUser === reply.data[i].name) {
                 users.innerHTML += `
-                <li class="to toUser" onclick="dataMsg(this)">
+                <li data-test="participant" class="to toUser" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
-                    <p data-test="participant">${reply.data[i].name}</p>
+                    <p >${reply.data[i].name}</p>
                     <span><ion-icon data-test="check" class="check" name="checkmark"></ion-icon></span>
                 </li>`;
                 checkStatus = 1;
