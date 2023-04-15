@@ -100,7 +100,6 @@ function renderMsgs() {
     const promiseMsg = axios.get('https://mock-api.driven.com.br/api/vm/uol/messages');
     /// Build the messages.
     promiseMsg.then((reply) => {
-        let text = ``;
         let mensages = document.querySelector("main>ul");
         mensages.innerHTML = ""
         for (let i = 0; i < reply.data.length; i++) {
@@ -121,6 +120,11 @@ function renderMsgs() {
                     if (reply.data[i].from === user.name || reply.data[i].to === user.name) {
                         mensages.innerHTML += `
                         <li data-test="message" class="msg ${reply.data[i].type}">
+                            <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
+                        </li>`
+                    }else {
+                        mensages.innerHTML += `
+                        <li data-test="message" class="msg hidden ${reply.data[i].type}">
                             <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
                         </li>`
                     }
