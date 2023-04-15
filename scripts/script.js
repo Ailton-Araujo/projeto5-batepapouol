@@ -1,5 +1,6 @@
 let user = {};
 let toUser = "";
+let oldToUser = "";
 let message = {
     from: "",
     to: "Todos",
@@ -32,12 +33,14 @@ function menuSidebar() {
 }
 
 function dataMsg(data) {
+
     if (data.classList.contains("to") === true &&
         data.querySelector("span .check") === null) {
-        let old = document.querySelector(".users span .check");
-        old.parentNode.innerHTML = ""
 
-        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`
+        oldToUser.parentNode.innerHTML = "";
+        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`;
+
+        oldToUser = document.querySelector(".users li>span .check");
 
         document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
         toUser = data.querySelector("p").innerHTML;
@@ -46,9 +49,9 @@ function dataMsg(data) {
     } else if (data.classList.contains("type") === true &&
         data.querySelector("span .check") === null) {
         let old = document.querySelector(".msgType li>span .check");
-        old.parentNode.innerHTML = ""
-        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`
-        if (data.classList[1] === "private_message") {
+        old.parentNode.innerHTML = "";
+        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`;
+        if (data.classList[1] === "private_message"){
             document.querySelector("span.typeMsg").innerHTML = ` (${data.querySelector("p").innerHTML})`;
         } else {
             document.querySelector("span.typeMsg").innerHTML = "";
@@ -76,18 +79,15 @@ function loginServer() {
             document.querySelector(".msgPage").classList.remove("hidden");
             renderMsgs();
             renderUsers();
-            setInterval(renderMsgs, 3000);
-            setInterval(renderUsers, 10000);
-            setInterval(() => {
-                axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
-            }, 5000);
         }
     });
     promiseLogin.catch((reply) => {
-        document.querySelector(".loading").classList.add("hidden");
-        document.querySelector(".userInput").classList.remove("hidden");
-        alert("Nome de Usuário já utilizado, por favor selecione outro Nome de Usuário");
-        inputLogin.value = "";
+        if (reply.response.status === 400) {
+            document.querySelector(".loading").classList.add("hidden");
+            document.querySelector(".userInput").classList.remove("hidden");
+            alert("Nome de Usuário já utilizado, por favor selecione outro Nome de Usuário");
+            inputLogin.value = "";
+        }
     });
 }
 
@@ -103,25 +103,25 @@ function renderMsgs() {
                     mensages.innerHTML += `
                     <li data-test="message" class="msg ${reply.data[i].type}">
                         <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> ${reply.data[i].text}</p>
-                    </li>`
+                    </li>`;
                     break;
                 case "message":
                     mensages.innerHTML += `
                     <li data-test="message" class="msg ${reply.data[i].type}">
                         <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
-                    </li>`
+                    </li>`;
                     break;
                 case "private_message":
                     if (reply.data[i].from === user.name || reply.data[i].to === user.name) {
                         mensages.innerHTML += `
                         <li data-test="message" class="msg ${reply.data[i].type}">
                             <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
-                        </li>`
+                        </li>`;
                     }else {
                         mensages.innerHTML += `
                         <li data-test="message" class="msg hidden ${reply.data[i].type}">
                             <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
-                        </li>`
+                        </li>`;
                     }
                     break;
             }
@@ -140,6 +140,7 @@ function renderUsers() {
                 <li data-test="all" class="to toAll" onclick="dataMsg(this)">
                     <ion-icon name="people"></ion-icon>
                     <p>Todos</p>
+                    <span></span>
                 </li>`;
         for (let i = 0; i < reply.data.length; i++) {
             if (toUser !== reply.data[i].name) {
@@ -157,13 +158,13 @@ function renderUsers() {
                     <span><ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon></span>
                 </li>`;
                 checkStatus = 1;
-            }
-            if(i === (reply.data.length-1) && checkStatus !== 1){
-                toUser = "";
+                oldToUser = users.querySelector(".toUser span .check");
             }
         }
-        if (toUser === "" && checkStatus !== 1) {
-            document.querySelector(".users > .toAll").innerHTML += `<span><ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon></span>`
+
+        if (checkStatus === 0) {
+            users.querySelector(".toAll span").innerHTML += `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`;
+            oldToUser = users.querySelector(".toAll span .check");
         }
     })
 }
@@ -193,12 +194,8 @@ function sendMsg() {
 }
 
 conectServer('yLXdTVeSPYJui1kPya4pTuGv');
-
-/*
-        if (reply.response.status === 400) {
-            document.querySelector(".loading").classList.add("hidden");
-            document.querySelector(".userInput").classList.remove("hidden");
-            alert("Nome de Usuário já utilizado, por favor selecione outro Nome de Usuário");
-            inputLogin.value = "";
-        }
-        */
+setInterval(renderMsgs, 3000);
+setInterval(renderUsers, 10000);
+setInterval(() => {
+    axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
+}, 5000);
