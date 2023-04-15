@@ -42,7 +42,7 @@ function dataMsg(data) {
         document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
         toUser = data.querySelector("p").innerHTML;
         message.to = data.querySelector("p").innerHTML;
-
+        console.log(message);
     } else if (data.classList.contains("type") === true &&
         data.querySelector("span .check") === null) {
         let old = document.querySelector(".msgType li>span .check");
@@ -54,6 +54,7 @@ function dataMsg(data) {
             document.querySelector("span.typeMsg").innerHTML = "";
         }
         message.type = data.classList[1];
+        console.log(message);
     }
 }
 
@@ -175,6 +176,7 @@ inputMsg.addEventListener("keypress", function (event) {
 function sendMsg() {
     message.text = inputMsg.value;
     inputMsg.value = "";
+    console.log(message);
     const promiseMsg = axios.post('https://mock-api.driven.com.br/api/vm/uol/messages', message);
     message.text = "";
     promiseMsg.then((reply) => {
