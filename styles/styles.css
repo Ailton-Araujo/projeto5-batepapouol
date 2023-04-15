@@ -154,6 +154,7 @@ h1 {
 
 .to,
 .type {
+    margin: 2px 0px;
     padding: 0px 18px;
     display: flex;
     align-items: center;

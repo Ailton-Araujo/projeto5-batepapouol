@@ -30,19 +30,24 @@ function menuSidebar() {
     }
 }
 
+let test;
+
 function dataMsg(data) {
-    let old = document.querySelector("li>span .check");
-    old.parentNode.innerHTML = ""
     if (data.classList.contains("to") === true &&
-        data.querySelector("span.check") === null) {
+        data.querySelector("span .check") === null) {
+            let old = document.querySelector(".users li>span .check");
+            old.parentNode.innerHTML = ""
+
             data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
 
             document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
             message.to = data.querySelector("p").innerHTML;
             
     } else if (data.classList.contains("type") === true &&
-        data.querySelector("span.check") === null) {
-            
+        data.querySelector("span .check") === null) {
+            let old = document.querySelector(".msgType li>span .check");
+            old.parentNode.innerHTML = ""
+
             data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
 
         if (data.classList[1] === "private_message") {
@@ -158,7 +163,7 @@ function sendMsg() {
             renderMsgs();
         }
     });
-    promiseMsg.catch((reply) => {
+    promiseMsg.catch(() => {
         window.location.reload();
     });
 }
