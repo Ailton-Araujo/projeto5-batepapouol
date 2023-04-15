@@ -31,15 +31,13 @@ function menuSidebar() {
     }
 }
 
-
-
 function dataMsg(data) {
     if (data.classList.contains("to") === true &&
         data.querySelector("span .check") === null) {
         let old = document.querySelector(".users span .check");
         old.parentNode.innerHTML = ""
 
-        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
+        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`
 
         document.querySelector("span.toMsg").innerHTML = data.querySelector("p").innerHTML;
         toUser = data.querySelector("p").innerHTML;
@@ -49,15 +47,12 @@ function dataMsg(data) {
         data.querySelector("span .check") === null) {
         let old = document.querySelector(".msgType li>span .check");
         old.parentNode.innerHTML = ""
-
-        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark"></ion-icon>`
-
+        data.querySelector("span").innerHTML = `<ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon>`
         if (data.classList[1] === "private_message") {
             document.querySelector("span.typeMsg").innerHTML = ` (${data.querySelector("p").innerHTML})`;
         } else {
             document.querySelector("span.typeMsg").innerHTML = "";
         }
-
         message.type = data.classList[1];
     }
 }
@@ -71,7 +66,6 @@ function loginServer() {
         name: inputLogin.value
     };
     message.from = user.name;
-
     const promiseLogin = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', user);
     document.querySelector(".userInput").classList.add("hidden");
     document.querySelector(".loading").classList.remove("hidden");
@@ -84,15 +78,16 @@ function loginServer() {
             renderUsers();
             setInterval(renderMsgs, 3000);
             setInterval(renderUsers, 10000);
+            setInterval(() => {
+                axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
+            }, 5000);
         }
     });
     promiseLogin.catch((reply) => {
-        if (reply.response.status === 400) {
-            document.querySelector(".loading").classList.add("hidden");
-            document.querySelector(".userInput").classList.remove("hidden");
-            alert("Nome de Usuário já utilizado, por favor selecione outro Nome de Usuário");
-            inputLogin.value = "";
-        }
+        document.querySelector(".loading").classList.add("hidden");
+        document.querySelector(".userInput").classList.remove("hidden");
+        alert("Nome de Usuário já utilizado, por favor selecione outro Nome de Usuário");
+        inputLogin.value = "";
     });
 }
 
@@ -135,7 +130,6 @@ function renderMsgs() {
     });
 }
 
-
 function renderUsers() {
     const promiseUsers = axios.get('https://mock-api.driven.com.br/api/vm/uol/participants');
     /// Build the sidebar
@@ -160,7 +154,7 @@ function renderUsers() {
                 <li data-test="participant" class="to toUser" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
                     <p >${reply.data[i].name}</p>
-                    <span><ion-icon data-test="check" class="check" name="checkmark"></ion-icon></span>
+                    <span><ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon></span>
                 </li>`;
                 checkStatus = 1;
             }
@@ -169,7 +163,7 @@ function renderUsers() {
             }
         }
         if (toUser === "" && checkStatus !== 1) {
-            document.querySelector(".users > .toAll").innerHTML += `<span><ion-icon data-test="check" class="check" name="checkmark"></ion-icon></span>`
+            document.querySelector(".users > .toAll").innerHTML += `<span><ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon></span>`
         }
     })
 }
@@ -199,7 +193,12 @@ function sendMsg() {
 }
 
 conectServer('yLXdTVeSPYJui1kPya4pTuGv');
-setInterval(() => {
-    axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
-}, 5000);
 
+/*
+        if (reply.response.status === 400) {
+            document.querySelector(".loading").classList.add("hidden");
+            document.querySelector(".userInput").classList.remove("hidden");
+            alert("Nome de Usuário já utilizado, por favor selecione outro Nome de Usuário");
+            inputLogin.value = "";
+        }
+        */

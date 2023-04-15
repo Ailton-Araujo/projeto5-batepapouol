@@ -253,9 +253,11 @@ footer {
     justify-content: start;
     align-items: center;
 }
-.userMsg>p{
+.userMsg>div{
     width: 100%;
+    padding-left: 2px;
     font-weight: 300;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     line-height: 25px;
     text-align: start;
@@ -281,17 +283,7 @@ footer > button {
     background: none;
 }
 
-footer  button ion-icon {
+footer button ion-icon {
     width: 26px;
     height: 26px;
-}
-
-.sendData{
-    width: 100%;
-    padding: 0px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Roboto', sans-serif;
-
 }
