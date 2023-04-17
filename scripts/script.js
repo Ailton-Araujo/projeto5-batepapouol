@@ -7,15 +7,6 @@ let message = {
     type: "message"
 }
 
-const inputLogin = document.querySelector(".idLogin");
-inputLogin.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        ///event.preventDefault();
-        document.querySelector(".userInput>button").click();
-    }
-}
-);
-
 function menuSidebar() {
     const classSidebar = document.querySelector(".sidebar");
     if (classSidebar.classList.contains("hidden")) {
@@ -61,6 +52,15 @@ function dataMsg(data) {
 function conectServer(string) {
     axios.defaults.headers.common['Authorization'] = `${string}`;
 }
+
+const inputLogin = document.querySelector(".idLogin");
+inputLogin.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        ///event.preventDefault();
+        document.querySelector(".userInput>button").click();
+    }
+}
+);
 
 function loginServer() {
     user = {
@@ -209,7 +209,7 @@ function sendMsg() {
     });
 }
 
-conectServer('yLXdTVeSPYJui1kPya4pTuGv');
+conectServer('aAWHcuPvji2KvwzqU1HbnlC1');
 
 setInterval(() => {
     axios.post('https://mock-api.driven.com.br/api/vm/uol/status', user);
