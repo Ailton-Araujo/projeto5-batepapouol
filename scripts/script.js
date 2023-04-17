@@ -102,25 +102,40 @@ function renderMsgs() {
                 case "status":
                     mensages.innerHTML += `
                     <li data-test="message" class="msg ${reply.data[i].type}">
-                        <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> ${reply.data[i].text}</p>
+                        <p><span class="time">(${reply.data[i].time})
+                            </span> <strong>${reply.data[i].from}
+                            </strong> ${reply.data[i].text}
+                        </p>
                     </li>`;
                     break;
                 case "message":
                     mensages.innerHTML += `
                     <li data-test="message" class="msg ${reply.data[i].type}">
-                        <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
+                        <p><span class="time">(${reply.data[i].time})
+                            </span> <strong>${reply.data[i].from}
+                            </strong> para <strong>${reply.data[i].to}:
+                            </strong> ${reply.data[i].text}
+                        </p>
                     </li>`;
                     break;
                 case "private_message":
                     if (reply.data[i].from === user.name || reply.data[i].to === user.name) {
                         mensages.innerHTML += `
                         <li data-test="message" class="msg ${reply.data[i].type}">
-                            <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
+                            <p><span class="time">(${reply.data[i].time})
+                                </span> <strong>${reply.data[i].from}
+                                </strong> reservadamente para <strong>${reply.data[i].to}:
+                                </strong> ${reply.data[i].text}
+                            </p>
                         </li>`;
                     }else {
                         mensages.innerHTML += `
                         <li data-test="message" class="msg hidden ${reply.data[i].type}">
-                            <p><span class="time">(${reply.data[i].time})</span> <strong>${reply.data[i].from}</strong> reservadamente para <strong>${reply.data[i].to}:</strong> ${reply.data[i].text}</p>
+                            <p><span class="time">(${reply.data[i].time})
+                                </span> <strong>${reply.data[i].from}
+                                </strong> reservadamente para <strong>${reply.data[i].to}:
+                                </strong> ${reply.data[i].text}
+                            </p>
                         </li>`;
                     }
                     break;
@@ -155,12 +170,17 @@ function renderUsers() {
                 users.innerHTML += `
                 <li data-test="participant" class="to toUser" onclick="dataMsg(this)">
                     <ion-icon name="person-circle"></ion-icon>
-                    <p >${reply.data[i].name}</p>
+                    <p>${reply.data[i].name}</p>
                     <span><ion-icon data-test="check" class="check" name="checkmark-sharp"></ion-icon></span>
                 </li>`;
-                
+                checkStatus = 1
             }
         }
+    if(checkStatus === 0){
+        document.querySelector("span.toMsg").innerHTML = "Todos";
+        message.to = "Todos";
+    }
+    
     })
 }
 
